@@ -5,13 +5,73 @@
 	background-repeat: no-repeat !important;
 	background-position: center !important;
 	position: relative;
-	.title-wrapper{
+	cursor:pointer;
+	&.no-image{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.icon-size {
+		transform: scale(3);
+ 	}
+	 .title-wrapper{
 		position: absolute;
-		bottom:0;
+		bottom:-1px;
 		width:100%;
 		text-align: center;
 		color:white;
 		box-shadow: 0 0px 36px 28px black;
+		.desc-wrapper{
+			width:100%;
+			display:flex;
+			background:black;
+			flex-direction: column;
+			align-items: center;
+			.desc-content{
+				padding:0 10px;
+				width: calc(100% - 20px);
+				p{
+					color:white;
+				}
+				.overview{
+					display: -webkit-box;
+					word-break: break-word;
+					-webkit-line-clamp: 4;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+					margin:0;
+				}
+				.content{
+					display:flex;
+					align-items: center;
+					justify-content: space-around;
+					.favorite{
+						width:40px;
+						height:40px;
+						border-radius:9999px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						.size {
+							font-size:24px;
+						 }
+					}
+					.popularity{
+						display:inline-flex;
+						gap:10px;
+						margin:0;
+					}
+				}
+				.genre-wrapper{
+					.genre{
+						width: 100%;
+						margin:0;
+						border-radius: 10px;
+						border:1px solid grey;
+					}
+				}
+			}
+		}
 		.title{
 			background: black;
 			margin: 0;

@@ -31,6 +31,14 @@ export class ApiService {
       .pipe(catchError(this.errorGetHandler.bind(this)));
   }
 
+  postDataApi(param: string, body: any): Observable<any> {
+    return this.httpClient
+      .post<any>(this.API_URL + param, body, {
+        headers: this.headers,
+      })
+      .pipe(catchError(this.errorHandler));
+  }
+
   errorGetHandler(error: HttpErrorResponse) {
     return throwError(() => new Error(error.message || 'Data Not Found'));
   }

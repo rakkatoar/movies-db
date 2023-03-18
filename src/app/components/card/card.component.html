@@ -1,5 +1,22 @@
-<div class="card" [ngStyle]="{'background': 'url('+imageURL+item.poster_path+')'}">
+<div class="card" (mouseenter)="toggle()" (mouseleave)="toggle()" [ngClass]="{'no-image': item.poster_path ? false : true}" [ngStyle]="{'background': item.poster_path ? 'url('+imageURL+item.poster_path+')' : 'grey'}">
+	<mat-icon *ngIf="item.poster_path === null" class="icon-size">broken_image</mat-icon>
 	<div class="title-wrapper">
 		<p class="title">{{item.title}}</p>
+		<div class="desc-wrapper" [@openClose]="isOpen ? 'open' : 'closed'">
+			<div class="desc-content">
+				<p class="overview">{{item.overview}}</p>
+				<div class="content">
+					<p class="popularity"><mat-icon>trending_up</mat-icon>{{item.popularity}}</p>
+					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite.'" (click)="addToFavorite(item.id)"><mat-icon class="size">favorite</mat-icon></button>
+				</div>
+				<mat-grid-list [matTooltipPosition]="'above'" [matTooltip]="'Genre Movie'" class="genre-wrapper" cols="2" rowHeight="42px" [gutterSize]="'4px'">
+					<ng-container *ngFor="let genre of getGenre(item.genre_ids); let index = index">
+						<mat-grid-tile *ngIf="index < 4">
+							<p class="genre">{{item!.genre_ids!.length > 4 && index === 3 ? "+"+(item!.genre_ids!.length - 3)+' more' : genre}}</p>
+						</mat-grid-tile>
+					</ng-container>
+				</mat-grid-list>
+			</div>
+		</div>
 	</div>
 </div>

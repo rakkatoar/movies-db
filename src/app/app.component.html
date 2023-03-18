@@ -3,6 +3,10 @@
     <mat-expansion-panel-header>
       <mat-panel-title class="header">
         <h1 >Discover Movie</h1>
+        <button mat-raised-button color="primary" *ngIf="accountId === 0; else loggedIn" (click)="createSession()">Create Session</button>
+        <ng-template #loggedIn>
+          <button mat-raised-button>{{accountId}}</button>
+        </ng-template>
         <mat-icon>filter_list</mat-icon>
       </mat-panel-title>
     </mat-expansion-panel-header>
@@ -20,26 +24,33 @@
         <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
 
-      <mat-paginator #paginator
-        class="demo-paginator"
-        (page)="handlePageEvent($event)"
-        [length]="totalMovies"
-        [pageSize]="20"
-        [hidePageSize]="true"
-        [showFirstLastButtons]="true"
-        [pageIndex]="pageIndex"
-        aria-label="Select page">
-      </mat-paginator>
-  
+      <mat-form-field appearance="fill">
+        <mat-label>Select an option</mat-label>
+        <mat-select [(value)]="activeSort.code" >
+          <mat-option *ngFor="let option of sortList"
+          [value]="option.code">{{option.title}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
       <button mat-raised-button (click)="applyFilter('reset')">Reset</button>
       <button mat-raised-button color="primary" (click)="applyFilter('apply')">Apply</button>
     </div>
-
   </mat-expansion-panel>
+  
+  <mat-paginator #paginator
+    class="demo-paginator"
+    (page)="handlePageEvent($event)"
+    [length]="totalMovies"
+    [pageSize]="20"
+    [hidePageSize]="true"
+    [showFirstLastButtons]="true"
+    [pageIndex]="pageIndex"
+    aria-label="Select page">
+  </mat-paginator>
 
   <mat-grid-list cols="4" rowHeight="1:1.5" [gutterSize]="'20px'">
     <mat-grid-tile *ngFor="let item of dataMovies">
-      <app-card class="card" [item]="item"></app-card>
+      <app-card class="card" [item]="item" [genres]="dataGenres"></app-card>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
