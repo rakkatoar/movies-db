@@ -1,56 +1,49 @@
 <div class="wrapper">
-  <mat-expansion-panel class="filter-wrapper" hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title class="header">
-        <h1 >Discover Movie</h1>
-        <button mat-raised-button color="primary" *ngIf="accountId === 0; else loggedIn" (click)="createSession()">Create Session</button>
-        <ng-template #loggedIn>
-          <button mat-raised-button>{{accountId}}</button>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+      (closed)="events.push('close!')">
+      <h3 routerLink="/" class="cursor-pointer" [ngClass]="{'active': router.url !== '/favorites'}"> Discover </h3>
+      <h3 routerLink="/favorites" class="cursor-pointer" [ngClass]="{'active': router.url === '/favorites'}"> Favorites </h3>
+      <button mat-raised-button color="primary" *ngIf="accountId === 0; else loggedIn" (click)="createSession()">Create Session</button>
+      <ng-template #loggedIn>
+        <button mat-raised-button>Session Active</button>
+      </ng-template>
+      <div class="side-content" *ngIf="router.url === '/'">
+        <mat-form-field appearance="fill" class="datepicker">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        
+          <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+    
+        <mat-form-field appearance="fill">
+          <mat-label>Select an option</mat-label>
+          <mat-select [(value)]="activeSort.code" >
+            <mat-option *ngFor="let option of sortList"
+            [value]="option.code">{{option.title}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="side-buttons" *ngIf="router.url === '/'">
+        <button mat-raised-button (click)="applyFilter('reset')">Reset</button>
+        <button mat-raised-button color="primary" (click)="applyFilter('apply')">Apply</button>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet (activate)="onActivate($event)"></router-outlet>
+      <div class="content">
+        <button mat-button (click)="sidenav.toggle()" *ngIf="!opened; else closeIcon"><mat-icon>table_rows</mat-icon></button>
+        <ng-template #closeIcon>
+          <button mat-button (click)="sidenav.toggle()"><mat-icon class="close-button">play_arrow</mat-icon></button>
         </ng-template>
-        <mat-icon>filter_list</mat-icon>
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="filter-content">
-      <mat-form-field appearance="fill" class="datepicker">
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Start date">
-          <input matEndDate formControlName="end" placeholder="End date">
-        </mat-date-range-input>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-      
-        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Select an option</mat-label>
-        <mat-select [(value)]="activeSort.code" >
-          <mat-option *ngFor="let option of sortList"
-          [value]="option.code">{{option.title}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      
-      <button mat-raised-button (click)="applyFilter('reset')">Reset</button>
-      <button mat-raised-button color="primary" (click)="applyFilter('apply')">Apply</button>
-    </div>
-  </mat-expansion-panel>
-  
-  <mat-paginator #paginator
-    class="demo-paginator"
-    (page)="handlePageEvent($event)"
-    [length]="totalMovies"
-    [pageSize]="20"
-    [hidePageSize]="true"
-    [showFirstLastButtons]="true"
-    [pageIndex]="pageIndex"
-    aria-label="Select page">
-  </mat-paginator>
-
-  <mat-grid-list cols="4" rowHeight="1:1.5" [gutterSize]="'20px'">
-    <mat-grid-tile *ngFor="let item of dataMovies">
-      <app-card class="card" [item]="item" [genres]="dataGenres"></app-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+        <h1>{{router.url !== '/favorites' ? 'Discover' : router.url === '/favorites' ? 'Favorites' : ''}}</h1>
+      </div>
+      </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

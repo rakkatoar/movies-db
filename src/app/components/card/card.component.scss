@@ -52,6 +52,10 @@
 						display: flex;
 						justify-content: center;
 						align-items: center;
+						cursor:pointer;
+						.isFavorite{
+							-webkit-text-fill-color:red;
+						}
 						.size {
 							font-size:24px;
 						 }

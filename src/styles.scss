@@ -7,3 +7,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 	display:flex !important;
 	align-items: center !important;
 }
+
+.mat-paginator-container{
+	min-height:62px;
+}

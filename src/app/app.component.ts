@@ -1,52 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ContentChild  } from '@angular/core';
 import { ApiService } from 'src/app/shared/api/api.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import {FormGroup, FormControl} from '@angular/forms';
 import * as moment from 'moment';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-export interface IDate {
-  start: string;
-  end: string;
-}
+import { HomeComponent } from './pages/home/home.component';
+
 export interface ISort {
   code: string;
   title: string;
 }
-export interface IGenre {
-  id: string;
-  name: string;
-}
-export interface IMovie {
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: [];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count:number;
+export interface IDate {
+  start: string;
+  end: string;
 }
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  activatedComponentReference!:HomeComponent
   private readonly unSubs = new Subject<any>();
-  private loading: boolean = true;
+  public events: string[] = [];
+  public opened: boolean = true;
   private page: number = 1;
   private filterDate: Partial<IDate> = {};
   public pageIndex: number = 0;
   public accountId: number = 0;
-  public dataMovies: IMovie[] = [];
-  public dataGenres: IGenre[] = [];
+  
   public totalMovies: number = 0;
   public activeSort: ISort = {
     code:'popularity.desc',
@@ -85,7 +68,7 @@ export class AppComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     public router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.route.queryParams.subscribe(params => {
       let approved = params['approved'];
@@ -93,12 +76,14 @@ export class AppComponent implements OnInit {
         this.getUserAccount()
       }
   });
-    this.getGenre()
-    this.getDataUser(this.page, this.activeSort.code, this.filterDate)
+    
   }
   ngOnInit(): void {
   }
 
+  onActivate(activatedComponentReference:any) {
+    this.activatedComponentReference = activatedComponentReference;
+  }
   getUserAccount() {
     this.apiService
       .getDataApi('account')
@@ -127,46 +112,17 @@ export class AppComponent implements OnInit {
         end:end
       }
       this.filterDate = obj;
-      this.getDataUser(this.page, this.activeSort.code, this.filterDate)
+      this.activatedComponentReference.getMovies(this.page, this.activeSort.code, this.filterDate)
     } else {
       this.range.reset();
       // reset page masih error
-      this.pageIndex = 0;
+      this.page = 1;
       this.activeSort = {
         code:'popularity.desc',
         title: 'Popularity: Highest'
       }
-      this.getDataUser(this.pageIndex+1, this.activeSort.code, {})
+      this.activatedComponentReference.getMovies(this.page, this.activeSort.code, this.filterDate)
     }
   }
-  getGenre() {
-    let url = `genre/movie/list`;
-    this.apiService
-      .getDataApi(url)
-      .pipe(takeUntil(this.unSubs))
-      .subscribe((res: any) => {
-        this.dataGenres = res.genres;
-        this.loading = false;
-      });
-  }
-  getDataUser(page: number, sort: string, date: Partial<IDate>) {
-    let url = `discover/movie?page=${page}&sort_by=${sort}`;
-    if(date.start && date.end && date.start !== 'Invalid date' && date.end !== 'Invalid date'){
-      url += `&sort_by=${sort}&primary_release_date.gte=${date.start}&primary_release_date.lte=${date.end}`;
-    }
-
-    this.apiService
-      .getDataApi(url)
-      .pipe(takeUntil(this.unSubs))
-      .subscribe((res: any) => {
-        this.dataMovies = res.results;
-        const total = res.total_results > 10000 ? 10000 : res.total_results;
-        this.totalMovies = total
-        this.loading = false;
-      });
-  }
-
-  handlePageEvent(e:any){
-    this.getDataUser((e.pageIndex+1), this.activeSort.code, this.filterDate)
-  }
+  
 }

@@ -7,7 +7,7 @@
 				<p class="overview">{{item.overview}}</p>
 				<div class="content">
 					<p class="popularity"><mat-icon>trending_up</mat-icon>{{item.popularity}}</p>
-					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite.'" (click)="addToFavorite(item.id)"><mat-icon class="size">favorite</mat-icon></button>
+					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite.'" (click)="addToFavorite(item.id, item.isFavorite)"><mat-icon class="size" [ngClass]="{'isFavorite': item.isFavorite}">favorite</mat-icon></button>
 				</div>
 				<mat-grid-list [matTooltipPosition]="'above'" [matTooltip]="'Genre Movie'" class="genre-wrapper" cols="2" rowHeight="42px" [gutterSize]="'4px'">
 					<ng-container *ngFor="let genre of getGenre(item.genre_ids); let index = index">

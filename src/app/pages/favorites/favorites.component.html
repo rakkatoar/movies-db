@@ -1,0 +1,17 @@
+<div class="header">
+	<mat-paginator #paginator
+		class="demo-paginator"
+		(page)="handlePageEvent($event)"
+		[length]="totalMovies"
+		[pageSize]="20"
+		[hidePageSize]="true"
+		[showFirstLastButtons]="true"
+		[pageIndex]="pageIndex"
+		aria-label="Select page">
+	</mat-paginator>
+</div>
+<mat-grid-list cols="4" rowHeight="1:1.5" [gutterSize]="'20px'" class="page-content">
+	<mat-grid-tile *ngFor="let item of dataMovies">
+		<app-card (getFavorites)="getFavorites()" class="card" [item]="item" [genres]="dataGenres"></app-card>
+	</mat-grid-tile>
+</mat-grid-list>

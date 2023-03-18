@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ApiService } from 'src/app/shared/api/api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   trigger,
   state,
@@ -14,6 +15,7 @@ export interface IMovie {
   genre_ids: [],
   id: number,
   original_language: string,
+  isFavorite: boolean,
   original_title: string,
   overview: string,
   popularity: number,
@@ -53,34 +55,50 @@ export interface IGenre {
 export class CardComponent implements OnInit {
   @Input() item : Partial<IMovie> = {};
   @Input() genres : Partial<IGenre>[] = [];
+  @Output() getFavorites: EventEmitter<any> = new EventEmitter();
   public dataMovies: IMovie [] = [];
   public imageURL: string = '';
   isOpen = false;
 
-  constructor(private apiService: ApiService,) { 
-    
+  constructor(
+    private apiService: ApiService,
+    private snackbar: MatSnackBar
+  ) { 
     this.imageURL = environment.IMG_URL;
   }
   
   ngOnInit(): void {
   }
 
-  addToFavorite(id:number | undefined){
+  addToFavorite(id:number | undefined, checked:boolean | undefined){
     const obj = {
       "media_type": "movie",
       "media_id": id,
-      "favorite": true
+      "favorite": checked ? false : true
     }
     const account_id = localStorage.getItem('account_id');
-    this.apiService
-        .postDataApi(`account/${account_id}/favorite`, obj)
-        .subscribe({
-          next: (res: any) => {
-            if (res.success) {
-              console.log(res)
+    if(account_id){
+      this.apiService
+          .postDataApi(`account/${account_id}/favorite`, obj)
+          .subscribe({
+            next: (res: any) => {
+              if (res.success) {
+                this.snackbar.open(res.status_message, 'OK', {
+                  duration: 5000,
+                });
+                this.getFavorites.emit()
+              } else {
+                this.snackbar.open(res.status_message, 'OK', {
+                  duration: 5000,
+                });
+              }
             }
-          }
-        });
+          });
+    } else {
+      this.snackbar.open("Please create session first.", 'OK', {
+        duration: 5000,
+      });
+    }
   }
   getGenre(itemGenres:[] | undefined){
     let arr: any[] = []
