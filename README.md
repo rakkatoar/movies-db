@@ -8,6 +8,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - &nbsp; Run `npm install` to install node modules. 
 - &nbsp; Run `ng serve` for a dev server.
 - &nbsp; Navigate to `http://localhost:4200/`.
+- &nbsp; Add to favorite needs you to create session first.
+- &nbsp; Open side menu then click Create Session button.
 
 ## Development server
 
