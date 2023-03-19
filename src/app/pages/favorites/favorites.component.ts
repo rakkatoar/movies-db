@@ -30,6 +30,10 @@ export interface IMovie {
   vote_average: number;
   vote_count:number;
 }
+export interface IReOrder {
+  currentIndex: number;
+  newIndex: number;
+}
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.component.html',
@@ -79,6 +83,14 @@ export class FavoritesComponent implements OnInit {
         const total = res.total_results > 10000 ? 10000 : res.total_results;
         this.totalMovies = total
         this.loading = false;
+
+        const orderedData = JSON.parse(localStorage.getItem('favoritesData') || '{}')
+        if(Object.keys(orderedData).length > 0){
+          let oldFavorites = orderedData.filter((n:any) => this.dataMovies.some((o:any) => o.id == n.id));
+          let newFavorites = this.dataMovies.filter((n:any) => !orderedData.some((o:any) => o.id == n.id));
+          const orderedFavorites = oldFavorites.concat(newFavorites);
+          this.dataMovies = orderedFavorites
+        }
       });
   }
 
@@ -99,5 +111,10 @@ export class FavoritesComponent implements OnInit {
 
   handlePageEvent(e:any){
     this.getMovies((e.pageIndex+1), this.activeSort.code, this.filterDate)
+  }
+
+  reOrder(reOrderData:IReOrder){
+    this.dataMovies.splice(reOrderData.currentIndex,0,this.dataMovies.splice(reOrderData.newIndex,1)[0]);
+    localStorage.setItem("favoritesData", JSON.stringify(this.dataMovies))
   }
 }

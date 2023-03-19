@@ -1,13 +1,17 @@
-<div class="card" (mouseenter)="toggle()" (mouseleave)="toggle()" [ngClass]="{'no-image': item.poster_path ? false : true}" [ngStyle]="{'background': item.poster_path ? 'url('+imageURL+item.poster_path+')' : 'grey'}">
+<div class="card" [ngClass]="{'no-image': item.poster_path ? false : true}" [ngStyle]="{'background': item.poster_path ? 'url('+imageURL+item.poster_path+')' : 'grey'}">
+	<div class="order-buttons" *ngIf="index >= 0">
+		<mat-icon class="button" (click)="reOrder(index, index-1)" [matTooltipPosition]="'above'" [matTooltip]="'Move to left'" *ngIf="index !== 0">arrow_circle_left</mat-icon>
+		<mat-icon class="button" (click)="reOrder(index, index+1)" [matTooltipPosition]="'above'" [matTooltip]="'Move to right'" *ngIf="index !== maxIndex">arrow_circle_right</mat-icon>
+	</div>
 	<mat-icon *ngIf="item.poster_path === null" class="icon-size">broken_image</mat-icon>
-	<div class="title-wrapper" (click)="seeDetail(item.id)">
-		<p class="title">{{item.title}}</p>
+	<div class="title-wrapper" (mouseenter)="toggle()" (mouseleave)="toggle()">
+		<p class="title" [matTooltipPosition]="'above'" [matTooltip]="'Read More'" (click)="seeDetail(item.id)" >{{item.title}}</p>
 		<div class="desc-wrapper" [@openClose]="isOpen ? 'open' : 'closed'">
 			<div class="desc-content">
-				<p class="overview">{{item.overview}}</p>
+				<p class="overview" [matTooltipPosition]="'above'" [matTooltip]="'Read More'" (click)="seeDetail(item.id)">{{item.overview}}</p>
 				<div class="content">
-					<p class="popularity"><mat-icon>trending_up</mat-icon>{{item.popularity}}</p>
-					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite.'" (click)="addToFavorite(item.id, item.isFavorite)"><mat-icon class="size" [ngClass]="{'isFavorite': item.isFavorite}">favorite</mat-icon></button>
+					<p class="popularity" [matTooltipPosition]="'above'" [matTooltip]="'Popularity'"><mat-icon>trending_up</mat-icon>{{item.popularity | number : '1.2-2'}}</p>
+					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite'" (click)="addToFavorite(item.id, item.isFavorite)"><mat-icon class="size" [ngClass]="{'isFavorite': item.isFavorite}">favorite</mat-icon></button>
 				</div>
 				<mat-grid-list [matTooltipPosition]="'above'" [matTooltip]="'Genre Movie'" class="genre-wrapper" cols="2" rowHeight="42px" [gutterSize]="'4px'">
 					<ng-container *ngFor="let genre of getGenre(item.genre_ids); let index = index">

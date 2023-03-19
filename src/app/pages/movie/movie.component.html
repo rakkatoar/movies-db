@@ -20,7 +20,7 @@
 							</ng-template>
 						</div>
 					</div>
-					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite.'" (click)="addToFavorite(dataMovie.id, dataMovie.isFavorite)"><mat-icon class="size" [ngClass]="{'isFavorite': dataMovie.isFavorite}">favorite</mat-icon></button>
+					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite'" (click)="addToFavorite(dataMovie.id, dataMovie.isFavorite)"><mat-icon class="size" [ngClass]="{'isFavorite': dataMovie.isFavorite}">favorite</mat-icon></button>
 				</div>
 			</mat-grid-tile>
 	</mat-grid-list>
@@ -34,7 +34,7 @@
 			</mat-grid-tile>
 			<mat-grid-tile colspan="1">
 				<div class="right-content">
-					<p class="popularity" [matTooltipPosition]="'above'" [matTooltip]="'Popularity'"><mat-icon>trending_up</mat-icon>{{dataMovie.popularity}}</p>
+					<p class="popularity" [matTooltipPosition]="'above'" [matTooltip]="'Popularity'"><mat-icon>trending_up</mat-icon>{{dataMovie.popularity | number : '1.2-2'}}</p>
 					<p class="revenue" [matTooltipPosition]="'above'" [matTooltip]="'Revenue'">$ {{dataMovie.revenue | number:'':'en-EN'}}</p>
 					<div class="rating">
 						<mat-icon>stars</mat-icon>
@@ -43,7 +43,7 @@
 						<p [matTooltipPosition]="'above'" [matTooltip]="'Total Vote'">{{dataMovie.vote_count | number:'':'en-EN'}}</p>
 					</div>
 					<p>Company:</p>
-					<p *ngIf="dataMovie.production_companies!.length === 0; else companyNames">No data.</p>
+					<p *ngIf="dataMovie.production_companies && dataMovie.production_companies!.length === 0; else companyNames">No data.</p>
 					<ng-template #companyNames>
 						<p class="company-wrapper">
 							<span class="company" *ngFor="let company of dataMovie.production_companies; let i = index">{{company.name + (i !==  (dataMovie.production_companies!.length - 1) ? ', ' : '')}}</span>

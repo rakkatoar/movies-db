@@ -11,7 +11,7 @@
 	</mat-paginator>
 </div>
 <mat-grid-list cols="4" rowHeight="1:1.5" [gutterSize]="'20px'" class="page-content">
-	<mat-grid-tile *ngFor="let item of dataMovies">
-		<app-card (getFavorites)="getFavorites()" class="card" [item]="item" [genres]="dataGenres"></app-card>
+	<mat-grid-tile *ngFor="let item of dataMovies; let i = index">
+		<app-card (getFavorites)="getFavorites()" (reOrderData)="reOrder($event)" [index]="i" [maxIndex]="dataMovies.length - 1" class="card" [item]="item" [genres]="dataGenres"></app-card>
 	</mat-grid-tile>
 </mat-grid-list>

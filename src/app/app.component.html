@@ -4,7 +4,7 @@
       (closed)="events.push('close!')">
       <h3 routerLink="/home" class="cursor-pointer" [ngClass]="{'active': router.url === '/home'}"> Discover </h3>
       <h3 routerLink="/favorites" class="cursor-pointer" [ngClass]="{'active': router.url === '/favorites'}"> Favorites </h3>
-      <button mat-raised-button color="primary" *ngIf="accountId === 0; else loggedIn" (click)="createSession()">Create Session</button>
+      <button mat-raised-button color="primary" *ngIf="accountId === ''; else loggedIn" (click)="createSession()">Create Session</button>
       <ng-template #loggedIn>
         <button mat-raised-button>Session Active</button>
       </ng-template>

@@ -96,7 +96,6 @@ export class MovieComponent implements OnInit {
       .pipe(takeUntil(this.unSubs))
       .subscribe((res: any) => {
         this.dataMovie = res;
-        console.log(res)
         this.getFavorites(res.id)
       });
   }

@@ -31,6 +31,10 @@ export interface IGenre {
   id: string;
   name: string;
 }
+export interface IReOrder {
+  currentIndex: number;
+  newIndex: number;
+}
 @Component({
   selector: 'app-card',
   animations: [
@@ -56,7 +60,10 @@ export interface IGenre {
 export class CardComponent implements OnInit {
   @Input() item : Partial<IMovie> = {};
   @Input() genres : Partial<IGenre>[] = [];
+  @Input() index : number = -1;
+  @Input() maxIndex : number = -1;
   @Output() getFavorites: EventEmitter<any> = new EventEmitter();
+  @Output() reOrderData = new EventEmitter<IReOrder>();
   public dataMovies: IMovie [] = [];
   public imageURL: string = '';
   isOpen = false;
@@ -103,7 +110,6 @@ export class CardComponent implements OnInit {
     }
   }
   seeDetail(id:number | undefined){
-    console.log(id)
     this.router.navigateByUrl('/movie?id_movie='+id );
   }
   getGenre(itemGenres:[] | undefined){
@@ -112,11 +118,19 @@ export class CardComponent implements OnInit {
       const exists = this.genres?.find(element => element.id === genre)
       arr.push(exists);
     });
-    const result = arr.map(element => element.name)
+    const result = arr.map(element => element?.name)
     return result;
   }
   
   toggle() {
     this.isOpen = !this.isOpen;
+  }
+
+  reOrder(currentIndex:number, newIndex:number) {
+    const obj = {
+      currentIndex:currentIndex,
+      newIndex:newIndex
+    }
+    this.reOrderData.emit(obj);
   }
 }

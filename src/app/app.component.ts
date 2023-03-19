@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   private page: number = 1;
   private filterDate: Partial<IDate> = {};
   public pageIndex: number = 0;
-  public accountId: number = 0;
+  public accountId: string = '';
   
   public totalMovies: number = 0;
   public activeSort: ISort = {
@@ -79,6 +79,10 @@ export class AppComponent implements OnInit {
     
   }
   ngOnInit(): void {
+    const account_id:string = localStorage.getItem('account_id')!;
+    if(account_id){
+      this.accountId = account_id
+    }
   }
 
   onActivate(activatedComponentReference:any) {
@@ -98,7 +102,7 @@ export class AppComponent implements OnInit {
       .getDataApi('authentication/token/new')
       .pipe(takeUntil(this.unSubs))
       .subscribe((res: any) => {
-        window.open(`https://www.themoviedb.org/authenticate/${res.request_token}?redirect_to=http:localhost:4200`);
+        window.open(`https://www.themoviedb.org/authenticate/${res.request_token}?redirect_to=http:localhost:4200/home`);
       });
   }
   applyFilter(type:string) {

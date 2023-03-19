@@ -77,7 +77,6 @@ export class HomeComponent implements OnInit {
       .getDataApi(url)
       .pipe(takeUntil(this.unSubs))
       .subscribe((res: any) => {
-        console.log(res)
         let favoriteAdded = res.results;
         favoriteAdded.forEach((movie:IMovie, index:number) => {
           const favIndex = this.dataFavorites.findIndex((fav:IMovie) => fav.id === movie.id);
