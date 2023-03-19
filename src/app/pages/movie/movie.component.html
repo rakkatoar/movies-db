@@ -1,0 +1,56 @@
+<div class="wrapper">
+	<mat-grid-list class="header" cols="8" rowHeight="60vh">
+			<mat-grid-tile colspan="2">
+				<img class="image" [src]="imageURL+dataMovie.poster_path"/>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="6">
+				<div class="backdrop" [ngClass]="{'no-image': dataMovie.backdrop_path ? false : true}" [ngStyle]="{'backgroundImage': dataMovie.backdrop_path ? 'linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('+imageURL+dataMovie.backdrop_path+')' : 'grey'}">
+					<div class="language-wrapper">
+						<p [matTooltipPosition]="'above'" [matTooltip]="'Spoken Language'" class="language" *ngFor="let lang of dataMovie.spoken_languages"><mat-icon>record_voice_over</mat-icon>
+							{{lang.english_name}}</p>
+					</div>
+					<div class="backdrop-content">
+						<h1>{{dataMovie.title}}</h1>
+						<div class="backdrop-desc">
+							<p [matTooltipPosition]="'above'" [matTooltip]="'Release Date'">{{dataMovie.release_date}}</p>
+							<p [matTooltipPosition]="'above'" [matTooltip]="'Runtime'">{{formatRuntime(dataMovie.runtime!)}}</p>
+							<a [href]="dataMovie.homepage" target="_blank" *ngIf="dataMovie.homepage !== ''; else noWebsite">Go to website</a>
+							<ng-template #noWebsite>
+								<p>No website</p>
+							</ng-template>
+						</div>
+					</div>
+					<button class="favorite" [matTooltipPosition]="'above'" [matTooltip]="'Add to favorite.'" (click)="addToFavorite(dataMovie.id, dataMovie.isFavorite)"><mat-icon class="size" [ngClass]="{'isFavorite': dataMovie.isFavorite}">favorite</mat-icon></button>
+				</div>
+			</mat-grid-tile>
+	</mat-grid-list>
+	<div class="content">	
+		<div class="genre-wrapper">
+			<p [matTooltipPosition]="'above'" [matTooltip]="'Genre'" class="genre" *ngFor="let genre of dataMovie.genres">{{genre.name}}</p>
+		</div>
+		<mat-grid-list cols="2" class="desc-wrapper" rowHeight="30vh" [gutterSize]="'8px'">
+			<mat-grid-tile colspan="1" [style.alignItems]="'top'">
+				<p>{{dataMovie.overview}}</p>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="1">
+				<div class="right-content">
+					<p class="popularity" [matTooltipPosition]="'above'" [matTooltip]="'Popularity'"><mat-icon>trending_up</mat-icon>{{dataMovie.popularity}}</p>
+					<p class="revenue" [matTooltipPosition]="'above'" [matTooltip]="'Revenue'">$ {{dataMovie.revenue | number:'':'en-EN'}}</p>
+					<div class="rating">
+						<mat-icon>stars</mat-icon>
+						<p [matTooltipPosition]="'above'" [matTooltip]="'Vote Average'">{{dataMovie.vote_average}}</p>
+						|
+						<p [matTooltipPosition]="'above'" [matTooltip]="'Total Vote'">{{dataMovie.vote_count | number:'':'en-EN'}}</p>
+					</div>
+					<p>Company:</p>
+					<p *ngIf="dataMovie.production_companies!.length === 0; else companyNames">No data.</p>
+					<ng-template #companyNames>
+						<p class="company-wrapper">
+							<span class="company" *ngFor="let company of dataMovie.production_companies; let i = index">{{company.name + (i !==  (dataMovie.production_companies!.length - 1) ? ', ' : '')}}</span>
+						</p>
+					</ng-template>
+				</div>
+			</mat-grid-tile>
+		</mat-grid-list>	
+	</div>
+</div>

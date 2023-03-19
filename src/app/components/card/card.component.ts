@@ -9,6 +9,7 @@ import {
   animate,
   transition,
 } from '@angular/animations';
+import { Router } from '@angular/router';
 export interface IMovie {
   adult: boolean;
   backdrop_path: string,
@@ -62,7 +63,8 @@ export class CardComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private router: Router
   ) { 
     this.imageURL = environment.IMG_URL;
   }
@@ -99,6 +101,10 @@ export class CardComponent implements OnInit {
         duration: 5000,
       });
     }
+  }
+  seeDetail(id:number | undefined){
+    console.log(id)
+    this.router.navigateByUrl('/movie?id_movie='+id );
   }
   getGenre(itemGenres:[] | undefined){
     let arr: any[] = []

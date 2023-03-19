@@ -59,20 +59,25 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getMovies(page: number, sort: string, date: Partial<IDate>) {
+  getMovies(page: number, sort: ISort, date: Partial<IDate>) {
+    this.page = page;
+    this.activeSort = sort;
+    this.filterDate = date;
+
     if(page === 1){
       this.pageIndex = 0;
     }
-    let url = `discover/movie?page=${page}&sort_by=${sort}`;
+    let url = `discover/movie?page=${page}&sort_by=${sort.code}`;
     if(date.start && date.end && date.start !== 'Invalid date' && date.end !== 'Invalid date'){
       url += `&primary_release_date.gte=${date.start}&primary_release_date.lte=${date.end}`;
     }
 
+    let total:number = 0;
     this.apiService
       .getDataApi(url)
       .pipe(takeUntil(this.unSubs))
       .subscribe((res: any) => {
-
+        console.log(res)
         let favoriteAdded = res.results;
         favoriteAdded.forEach((movie:IMovie, index:number) => {
           const favIndex = this.dataFavorites.findIndex((fav:IMovie) => fav.id === movie.id);
@@ -81,7 +86,7 @@ export class HomeComponent implements OnInit {
           }
         })
         this.dataMovies = favoriteAdded;
-        const total = res.total_results > 10000 ? 10000 : res.total_results;
+        total = res.total_results > 10000 ? 10000 : res.total_results;
         this.totalMovies = total
         this.loading = false;
       });
@@ -96,7 +101,7 @@ export class HomeComponent implements OnInit {
       .subscribe((res: any) => {
         this.dataFavorites = res.results;
         this.loading = false;
-        this.getMovies(this.page, this.activeSort.code, this.filterDate)
+        this.getMovies(this.page, this.activeSort, this.filterDate)
       });
   }
 
@@ -112,7 +117,7 @@ export class HomeComponent implements OnInit {
   }
 
   handlePageEvent(e:any){
-    this.getMovies((e.pageIndex+1), this.activeSort.code, this.filterDate)
+    this.getMovies((e.pageIndex+1), this.activeSort, this.filterDate)
   }
 
 }

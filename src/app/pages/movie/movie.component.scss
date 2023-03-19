@@ -1,0 +1,115 @@
+.wrapper{
+	margin-top:36px;
+	.header{
+		width:100%;
+		background-color: black;
+		.backdrop{
+			width:100%;
+			height:100%;
+			background-size: cover !important;
+			background-position: top center !important;
+			background-repeat: no-repeat !important;
+			padding:20px;
+			color:white;
+			position:relative;
+			.language-wrapper{
+				position:absolute;
+				top:2rem;
+				left:1rem;
+				gap:8px;
+				display: flex;
+				.language{
+					padding:5px 10px;
+					margin:0;
+					border-radius: 99px;
+					border:1px solid grey;
+					display: inline-flex;
+					align-items: center;
+					gap:6px
+				}
+			}
+			.backdrop-content{
+				position:absolute;
+				bottom: 2rem;
+				left: 1rem;
+
+				h1{
+					font-weight: bold;
+				}
+				.backdrop-desc{
+					display:flex;
+					gap:1rem;
+					a,a:visited{
+						color:white;
+					}
+				}
+			}
+			.favorite{
+				width:40px;
+				height:40px;
+				border-radius:9999px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				cursor:pointer;
+				position: absolute;
+				top:2rem;
+				right:1rem;
+				.isFavorite{
+					-webkit-text-fill-color:red;
+				}
+				.size {
+					font-size:24px;
+				 }
+			}
+		}
+		.image{
+			height:100%;
+		}
+	}
+	.content{
+		padding:20px;
+		.genre-wrapper{
+			display: flex;
+			align-items: center;
+			gap:1rem;
+			.genre{
+				padding:5px 10px;
+				margin:0;
+				border-radius: 99px;
+				border:1px solid grey;
+			}
+		}
+		.desc-wrapper{
+			margin-top:20px;
+			.right-content{
+				width:100%;
+				.popularity{
+					display:inline-flex;
+					gap:10px;
+					margin:0;
+				}
+				.revenue{
+					width: fit-content;
+				}
+				.rating{
+					display:flex;
+					gap: 1rem;
+					align-items: center;
+					margin-bottom:12px;
+					p{
+						margin:0;
+					}
+				}
+				.company-wrapper{
+					display: flex;
+					align-items: center;
+					gap:2px;
+					.company{
+						white-space: nowrap;
+					}
+				}
+			}
+		}
+	}
+}

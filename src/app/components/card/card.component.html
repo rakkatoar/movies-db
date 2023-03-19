@@ -1,6 +1,6 @@
 <div class="card" (mouseenter)="toggle()" (mouseleave)="toggle()" [ngClass]="{'no-image': item.poster_path ? false : true}" [ngStyle]="{'background': item.poster_path ? 'url('+imageURL+item.poster_path+')' : 'grey'}">
 	<mat-icon *ngIf="item.poster_path === null" class="icon-size">broken_image</mat-icon>
-	<div class="title-wrapper">
+	<div class="title-wrapper" (click)="seeDetail(item.id)">
 		<p class="title">{{item.title}}</p>
 		<div class="desc-wrapper" [@openClose]="isOpen ? 'open' : 'closed'">
 			<div class="desc-content">

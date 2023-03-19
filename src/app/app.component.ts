@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, ContentChild  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/shared/api/api.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import {FormGroup, FormControl} from '@angular/forms';
 import * as moment from 'moment';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 
 export interface ISort {
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   activatedComponentReference!:HomeComponent
   private readonly unSubs = new Subject<any>();
   public events: string[] = [];
-  public opened: boolean = true;
+  public opened: boolean = false;
   private page: number = 1;
   private filterDate: Partial<IDate> = {};
   public pageIndex: number = 0;
@@ -112,16 +112,20 @@ export class AppComponent implements OnInit {
         end:end
       }
       this.filterDate = obj;
-      this.activatedComponentReference.getMovies(this.page, this.activeSort.code, this.filterDate)
+      this.activatedComponentReference.getMovies(1, this.activeSort, this.filterDate)
     } else {
       this.range.reset();
-      // reset page masih error
       this.page = 1;
       this.activeSort = {
         code:'popularity.desc',
         title: 'Popularity: Highest'
       }
-      this.activatedComponentReference.getMovies(this.page, this.activeSort.code, this.filterDate)
+      const obj = {
+        start:"",
+        end:""
+      }
+      this.filterDate = obj;
+      this.activatedComponentReference.getMovies(this.page, this.activeSort, this.filterDate)
     }
   }
   

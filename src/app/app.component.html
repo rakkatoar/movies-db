@@ -2,13 +2,13 @@
   <mat-sidenav-container>
     <mat-sidenav #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
       (closed)="events.push('close!')">
-      <h3 routerLink="/" class="cursor-pointer" [ngClass]="{'active': router.url !== '/favorites'}"> Discover </h3>
+      <h3 routerLink="/home" class="cursor-pointer" [ngClass]="{'active': router.url === '/home'}"> Discover </h3>
       <h3 routerLink="/favorites" class="cursor-pointer" [ngClass]="{'active': router.url === '/favorites'}"> Favorites </h3>
       <button mat-raised-button color="primary" *ngIf="accountId === 0; else loggedIn" (click)="createSession()">Create Session</button>
       <ng-template #loggedIn>
         <button mat-raised-button>Session Active</button>
       </ng-template>
-      <div class="side-content" *ngIf="router.url === '/'">
+      <div class="side-content" *ngIf="router.url === '/home'">
         <mat-form-field appearance="fill" class="datepicker">
           <mat-label>Enter a date range</mat-label>
           <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -30,7 +30,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="side-buttons" *ngIf="router.url === '/'">
+      <div class="side-buttons" *ngIf="router.url === '/home'">
         <button mat-raised-button (click)="applyFilter('reset')">Reset</button>
         <button mat-raised-button color="primary" (click)="applyFilter('apply')">Apply</button>
       </div>
@@ -42,7 +42,7 @@
         <ng-template #closeIcon>
           <button mat-button (click)="sidenav.toggle()"><mat-icon class="close-button">play_arrow</mat-icon></button>
         </ng-template>
-        <h1>{{router.url !== '/favorites' ? 'Discover' : router.url === '/favorites' ? 'Favorites' : ''}}</h1>
+        <h1>{{router.url === '/home' ? 'Discover' : router.url === '/favorites' ? 'Favorites' : ''}}</h1>
       </div>
       </mat-sidenav-content>
   </mat-sidenav-container>
